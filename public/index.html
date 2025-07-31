@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>PDF Upload/Download</title>
+  </head>
+  <body>
+    <h1>Upload PDF</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <input type="file" name="pdf" accept=".pdf" required />
+      <button type="submit">Upload</button>
+    </form>
+
+    <h1>Download PDF</h1>
+    <ul id="file-list"></ul>
+
+    <script>
+      fetch('/download')
+        .then(response => response.json())
+        .then(files => {
+          const fileList = document.getElementById('file-list');
+          files.forEach(file => {
+            const listItem = document.createElement('li');
+            const link = document.createElement('a');
+            link.href = `/download/${file}`;
+            link.textContent = file;
+            listItem.appendChild(link);
+            fileList.appendChild(listItem);
+          });
+        })
+        .catch(error => console.error('Error:', error));
+    </script>
+  </body>
+</html>
