@@ -50,5 +50,17 @@ describe('PDF Upload/Download', () => {
       expect(res.statusCode).toBe(404);
       expect(res.text).toBe('File not found');
     });
+
+    it('should prevent path traversal attacks', async () => {
+      const res = await request(app).get('/download/../package.json');
+      expect(res.statusCode).toBe(400);
+      expect(res.text).toBe('Invalid filename');
+    });
+
+    it('should prevent directory traversal with encoded paths', async () => {
+      const res = await request(app).get('/download/..%2Fpackage.json');
+      expect(res.statusCode).toBe(400);
+      expect(res.text).toBe('Invalid filename');
+    });
   });
 });
