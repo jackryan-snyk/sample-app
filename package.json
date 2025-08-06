@@ -19,7 +19,7 @@
     "bar",
     "app"
   ],
-  "author": "David Schott",
+  "author": "Partner PSAs",
   "license": "Apache-2.0",
   "homepage": "https://github.com/jackryan-snyk/sample-app#readme",
   "devDependencies": {
