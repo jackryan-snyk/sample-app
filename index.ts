@@ -52,6 +52,8 @@ app.get('/download/:filename', downloadLimiter, (req, res) => {
   fileStream.pipe(res);
 });
 
-app.listen(3000, () => {
-  console.log('Server listening on port 3000');
-});
+if (require.main === module) {
+  app.listen(3000, () => {
+    console.log('Server listening on port 3000');
+  });
+}
