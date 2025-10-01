@@ -24,8 +24,9 @@ app.post('/upload', upload.single('pdf'), (req, res) => {
   if (!req.file) {
     return res.status(400).send('No file uploaded.');
   }
-  // Avoid reflecting user-controlled values unescaped
-  res.send(`File uploaded: ${req.file.filename}`);
+  // Return plain text with encoded identifier to avoid XSS
+  res.type('text/plain');
+  res.send(`File uploaded: ${encodeURIComponent(req.file.filename)}`);
 });
 
 const downloadLimiter = rateLimit({ windowMs: 60 * 1000, max: 30 });
