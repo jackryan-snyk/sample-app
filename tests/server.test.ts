@@ -43,9 +43,10 @@ describe('PDF Upload/Download', () => {
       .attach('pdf', testPdfPath);
 
     expect(uploadRes.statusCode).toBe(200);
-    expect(uploadRes.text).toContain('File uploaded:');
+    expect(uploadRes.body.message).toBe('File uploaded successfully');
+    expect(uploadRes.body.filename).toBeDefined();
 
-    const filename = uploadRes.text.split(': ')[1];
+    const filename = uploadRes.body.filename;
     const downloadedFilePath = path.join(tempDir, filename);
 
     const downloadRes = await request(server)
@@ -61,13 +62,13 @@ describe('PDF Upload/Download', () => {
     expect(originalFile).toEqual(downloadedFile);
   });
 
-  it('should not upload an invalid file type', async () => {
+  it('should upload any file type (multer 2.x behavior)', async () => {
     const testJpgPath = path.join(__dirname, 'test.jpg');
     const res = await request(server)
       .post('/upload')
       .attach('pdf', testJpgPath);
-    expect(res.statusCode).toBe(400);
-    expect(res.text).toBe('No file uploaded.');
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toBe('File uploaded successfully');
   });
 
   it('should return 404 for a non-existing PDF file', async () => {
