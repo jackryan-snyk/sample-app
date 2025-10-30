@@ -1,0 +1,8 @@
+# Version of the agent configuration standard
+version = "1.0"
+
+model = "gemini-2.5-pro"
+
+imports = [
+    "agents/snyk-test.toml"
+]

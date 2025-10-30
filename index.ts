@@ -24,6 +24,10 @@ app.get('/download/:filename', (req, res) => {
   fileStream.pipe(res);
 });
 
+app.get('/delete', (req, res) => {
+  console.log('Delete endpoint hit');
+});
+
 app.listen(3000, () => {
   console.log('Server listening on port 3000');
 });
