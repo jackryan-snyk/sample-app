@@ -24,7 +24,7 @@ app.get('/download/:filename', (req, res) => {
   fileStream.pipe(res);
 });
 
-app.get('/delete', (req, res) => {
+app.delete('/delete', (req, res) => {
   console.log('Delete endpoint hit');
 });
 
