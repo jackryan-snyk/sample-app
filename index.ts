@@ -12,7 +12,8 @@ app.post('/upload', upload.single('pdf'), (req, res) => {
   if (!req.file) {
     return res.status(400).send('No file uploaded.');
   }
-  res.send(`File uploaded: ${req.file.filename}`);
+  // Use JSON response to prevent XSS vulnerability
+  res.json({ message: 'File uploaded successfully', filename: req.file.filename });
 });
 
 app.get('/download/:filename', (req, res) => {
