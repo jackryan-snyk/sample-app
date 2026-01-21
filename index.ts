@@ -4,7 +4,17 @@ import fs from 'fs';
 import path from 'path';
 
 export const app = express();
-const upload = multer({ dest: 'uploads/' });
+
+const upload = multer({
+  dest: 'uploads/',
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype === 'application/pdf') {
+      cb(null, true);
+    } else {
+      cb(null, false);
+    }
+  }
+});
 
 app.use(express.static('public'));
 
