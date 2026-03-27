@@ -1,0 +1,44 @@
+# agent.toml
+version = "1.0"
+[commands.my_agent]
+description = "Run Snyk tests"
+instructions = """
+Scan the directory for Snyk SAST and SCA issues.
+"""
+
+# Optional: Define arguments
+arguments = [
+    { name = "input_file", type = "string", required = true, description = "Input file path" },
+    { name = "threshold", type = "number", required = false, default = 0.8, description = "Quality threshold" }
+]
+
+# Optional: MCP servers your agent uses
+mcpServers = """
+{
+     "Snyk": {
+      "command": "npx",
+      "args": ["-y", "snyk@latest", "mcp", "-t", "stdio"],
+      "env": {}
+    }
+}
+"""
+
+# Optional: Define tools you'd like your agent to be able to use
+tools = ["filesystem", "git", "shell", "github", "snyk"]
+
+# Optional: Define execution strategy: "plan" for multi-step, "act" for direct execution
+execution_strategy = "act"
+
+# Optional: Define expected output structure
+output_schema = """
+{
+    "properties": {
+        "success": {"type": "boolean"},
+        "results": {"type": "array", "items": {"type": "string"}},
+        "score": {"type": "number"}
+    }
+}
+"""
+
+# Optional: Success condition for CI/CD
+exit_expression = "success"
