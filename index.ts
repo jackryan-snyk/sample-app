@@ -12,7 +12,7 @@ app.post('/upload', upload.single('pdf'), (req, res) => {
   if (!req.file) {
     return res.status(400).send('No file uploaded.');
   }
-  res.send(`File uploaded: ${req.file.filename}`);
+  res.type('text/plain').send(`File uploaded: ${req.file.filename}`);
 });
 
 app.get('/download/:filename', (req, res) => {
