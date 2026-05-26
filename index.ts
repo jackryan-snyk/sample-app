@@ -4,7 +4,15 @@ import fs from 'fs';
 import path from 'path';
 
 export const app = express();
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({
+  dest: 'uploads/',
+  fileFilter: (_req, file, cb) => {
+    const isPdf =
+      file.mimetype === 'application/pdf' ||
+      file.originalname.toLowerCase().endsWith('.pdf');
+    cb(null, isPdf);
+  },
+});
 
 app.use(express.static('public'));
 
@@ -24,6 +32,8 @@ app.get('/download/:filename', (req, res) => {
   fileStream.pipe(res);
 });
 
-app.listen(3000, () => {
-  console.log('Server listening on port 3000');
-});
+if (require.main === module) {
+  app.listen(3000, () => {
+    console.log('Server listening on port 3000');
+  });
+}
