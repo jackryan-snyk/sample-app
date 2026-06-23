@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "Snyk": {
+      "command": "snyk",
+      "args": ["mcp", "-t", "stdio"],
+      "env": {}
+    }
+  }
+}

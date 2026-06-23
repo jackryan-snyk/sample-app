@@ -18,3 +18,8 @@ This repo is a single small product: `foo-bar-app`, an Express + TypeScript web 
 
 ### Note
 - The app intentionally contains a path-traversal vulnerability in `GET /download/:filename` (it's a Snyk demo app). Do not treat that as a bug to fix unless asked.
+
+### Snyk MCP server
+- The Snyk MCP server is configured in `.cursor/mcp.json` (`snyk mcp -t stdio`). Cursor reads this file at startup, so adding/changing it requires reloading Cursor before the `Snyk` server and its tools (`snyk_code_scan`, `snyk_sca_scan`, `snyk_auth`, etc.) appear.
+- It relies on the Snyk CLI being on `PATH`. The startup script installs it to `/usr/local/bin/snyk`. The usual `npx -y snyk@latest mcp -t stdio` does NOT work here: the `snyk` npm wrapper downloads its binary from `static.snyk.io`, which is blocked by this environment's network egress. The binary is instead fetched from GitHub release assets (`github.com/snyk/cli/releases`, which is reachable).
+- The MCP server boots and lists tools without authentication, but actually running scans needs both a Snyk token (e.g. `SNYK_TOKEN`) and network access to Snyk hosts. `api.snyk.io` / `static.snyk.io` are currently blocked by network egress, so live scans fail with `SNYK-CLI-0022` network errors until those hosts are allowlisted in the cloud agent Network Access settings.
