@@ -1,0 +1,5 @@
+{
+  "ok": false,
+  "error": "Use `snyk auth` to authenticate.",
+  "path": "/workspace/2ce8a200-0d16-4565-a0b4-334bd4da94a9/repository"
+}
