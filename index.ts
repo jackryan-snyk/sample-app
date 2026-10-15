@@ -2,8 +2,10 @@ import express from 'express';
 import multer from 'multer';
 import fs from 'fs';
 import path from 'path';
+import { usersRouter } from './users';
 
 export const app = express();
+app.disable('x-powered-by');
 const upload = multer({
   dest: 'uploads/',
   fileFilter: (_req, file, cb) => {
@@ -15,6 +17,7 @@ const upload = multer({
 });
 
 app.use(express.static('public'));
+app.use(usersRouter);
 
 app.post('/upload', upload.single('pdf'), (req, res) => {
   if (!req.file) {

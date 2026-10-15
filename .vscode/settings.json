@@ -1,3 +1,5 @@
 {
-    "snyk.advanced.autoSelectOrganization": false
+    "snyk.advanced.autoSelectOrganization": true,
+    "snyk.securityAtInception.autoConfigureSnykMcpServer": "",
+    "snyk.securityAtInception.executionFrequency": "Manual"
 }

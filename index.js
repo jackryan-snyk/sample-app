@@ -1,0 +1,42 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.app = void 0;
+const express_1 = __importDefault(require("express"));
+const multer_1 = __importDefault(require("multer"));
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
+const users_1 = require("./users");
+exports.app = (0, express_1.default)();
+exports.app.disable('x-powered-by');
+const upload = (0, multer_1.default)({
+    dest: 'uploads/',
+    fileFilter: (_req, file, cb) => {
+        const isPdf = file.mimetype === 'application/pdf' ||
+            file.originalname.toLowerCase().endsWith('.pdf');
+        cb(null, isPdf);
+    },
+});
+exports.app.use(express_1.default.static('public'));
+exports.app.use(users_1.usersRouter);
+exports.app.post('/upload', upload.single('pdf'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).send('No file uploaded.');
+    }
+    res.send(`File uploaded: ${req.file.filename}`);
+});
+exports.app.get('/download/:filename', (req, res) => {
+    const filePath = path_1.default.join(__dirname, 'uploads', req.params.filename);
+    const fileStream = fs_1.default.createReadStream(filePath);
+    fileStream.on('error', () => {
+        res.status(404).send('File not found');
+    });
+    fileStream.pipe(res);
+});
+if (require.main === module) {
+    exports.app.listen(3000, () => {
+        console.log('Server listening on port 3000');
+    });
+}
